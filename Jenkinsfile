@@ -32,6 +32,12 @@ pipeline {
             }
         }
 
+        stage('Pull Base Image') {
+            steps {
+                bat 'docker pull openjdk:8'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 dir('main') {
