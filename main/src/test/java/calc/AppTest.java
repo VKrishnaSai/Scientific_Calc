@@ -61,19 +61,4 @@ public class AppTest {
         App.Power power = new App.Power();
         assertEquals(2.0, power.cubeRoot(8.0), 0.001);
     }
-
-    @Test
-    public void testComplexToPolar() {
-        App.ComplexNum c = new App.ComplexNum(1.0, 1.0);
-        double[] polar = c.toPolar();
-        assertEquals(Math.sqrt(2), polar[0], 0.001);
-        assertEquals(Math.PI / 4, polar[1], 0.001);
-    }
-
-    @Test
-    public void testComplexFromPolar() {
-        App.ComplexNum c = App.ComplexNum.fromPolar(Math.sqrt(2), Math.PI / 4);
-        assertEquals(1.0, c.real, 0.001);
-        assertEquals(1.0, c.imag, 0.001);
-    }
 }

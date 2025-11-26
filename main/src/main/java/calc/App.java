@@ -5,8 +5,7 @@ import java.util.Scanner;
 /**
  * Scientific Calculator Application
  *
- * This class implements a scientific calculator with various operations
- * including arithmetic, power, and complex number functions.
+ * This class implements a scientific calculator with arithmetic and power operations.
  * It provides a menu-driven interface for user interaction.
  *
  * Author: Based on Python implementation by Baibhab Adhikari
@@ -42,11 +41,11 @@ public class App {
         }
 
         double division(double a, double b) {
-            try {
-                currentVal = a / b;
-            } catch (ArithmeticException e) {
+            if (b == 0) {
                 System.out.println("Cannot divide by zero!");
                 currentVal = 0;
+            } else {
+                currentVal = a / b;
             }
             return currentVal;
         }
@@ -73,35 +72,6 @@ public class App {
         }
     }
 
-    // Complex number operations
-    static class ComplexNum {
-        double real, imag;
-
-        ComplexNum(double r, double i) {
-            real = r;
-            imag = i;
-        }
-
-        // Convert to polar form
-        double[] toPolar() {
-            double r = Math.sqrt(real * real + imag * imag);
-            double phi = Math.atan2(imag, real);
-            return new double[]{r, phi};
-        }
-
-        // Convert from polar to rectangular
-        static ComplexNum fromPolar(double r, double phi) {
-            double real = r * Math.cos(phi);
-            double imag = r * Math.sin(phi);
-            return new ComplexNum(real, imag);
-        }
-
-        @Override
-        public String toString() {
-            return real + " + " + imag + "i";
-        }
-    }
-
     // Utility functions
     static void resetCurrentVal(Calculator instance) {
         instance.currentVal = 0;
@@ -112,9 +82,8 @@ public class App {
         System.out.println("Choose any one of the following operations to get started!:");
         System.out.println("1. Arithmetic");
         System.out.println("2. Power");
-        System.out.println("3. Complex");
-        System.out.println("4. Exit");
-        System.out.println("5. Reset Current Value");
+        System.out.println("3. Exit");
+        System.out.println("4. Reset Current Value");
     }
 
     static void printArithmeticMenu() {
@@ -128,38 +97,6 @@ public class App {
         System.out.println("A. Exponent");
         System.out.println("B. Square Root");
         System.out.println("C. Cube Root");
-    }
-
-    static void printComplexMenu() {
-        System.out.println("A. Convert Rectangular form to Polar form");
-        System.out.println("B. Convert Polar form to Rectangular form");
-    }
-
-    static double logInput(Scanner sc) {
-        while (true) {
-            try {
-                System.out.print("Enter x: ");
-                return sc.nextDouble();
-            } catch (Exception e) {
-                System.out.println("Please enter the correct value!");
-                sc.nextLine();
-            }
-        }
-    }
-
-    static double[] complexInput(Scanner sc) {
-        while (true) {
-            try {
-                System.out.print("Enter r: ");
-                double r = sc.nextDouble();
-                System.out.print("Enter phi: ");
-                double phi = sc.nextDouble();
-                return new double[]{r, phi};
-            } catch (Exception e) {
-                System.out.println("Please enter the correct value!");
-                sc.nextLine();
-            }
-        }
     }
 
     static double[] powerInput(Scanner sc) {
@@ -211,9 +148,9 @@ public class App {
             System.out.println();
 
             int choice = -1;
-            while (choice < 1 || choice > 5) {
+            while (choice < 1 || choice > 4) {
                 try {
-                    System.out.print("Please choose from 1 to 5: ");
+                    System.out.print("Please choose from 1 to 4: ");
                     choice = sc.nextInt();
                 } catch (Exception e) {
                     System.out.println("Invalid input!");
@@ -222,7 +159,7 @@ public class App {
             }
 
             // Handle choices
-            if (choice == 5) {
+            if (choice == 4) {
                 resetCurrentVal(calculator);
                 System.out.println("Current value has been reset to zero...\n");
             } else if (choice == 1) {
@@ -273,33 +210,12 @@ public class App {
                     System.out.println("Cube root of " + x + " = " + calculator.currentVal);
                 }
             } else if (choice == 3) {
-                printComplexMenu();
-                String operation = "wrong";
-                while (!"AB".contains(operation)) {
-                    System.out.print("Choose any of the above, (enter a or b): ");
-                    operation = sc.next().toUpperCase();
-                }
-                if ("A".equals(operation)) {
-                    System.out.print("Enter real part: ");
-                    double real = sc.nextDouble();
-                    System.out.print("Enter imaginary part: ");
-                    double imag = sc.nextDouble();
-                    ComplexNum z = new ComplexNum(real, imag);
-                    double[] polar = z.toPolar();
-                    System.out.println("Polar form of " + z + " = (" + polar[0] + ", " + polar[1] + ")");
-                } else if ("B".equals(operation)) {
-                    double[] rp = complexInput(sc);
-                    double r = rp[0], phi = rp[1];
-                    ComplexNum rect = ComplexNum.fromPolar(r, phi);
-                    System.out.println("Rectangular form of (" + r + ", " + phi + ") = " + rect);
-                }
-            } else if (choice == 4) {
                 calculation = false;
                 System.out.println("Thanks for using the Scientific Calculator!");
                 System.out.println("Exiting program.....");
             }
 
-            if (choice >= 1 && choice <= 3) {
+            if (choice >= 1 && choice <= 2) {
                 calculation = continueCalculator(sc);
                 if (!calculation) {
                     System.out.println("Thanks for using the Scientific Calculator!");

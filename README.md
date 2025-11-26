@@ -33,4 +33,3 @@ mvn test
 
 - Arithmetic operations: addition, subtraction, multiplication, division
 - Power and root operations: exponentiation, square root, cube root
-- Complex number conversions: rectangular to polar and vice versa
