@@ -49,10 +49,8 @@ pipeline {
         
         stage('Build Docker Image') {
             steps {
-                dir('main') {
-                    // Build the image. Docker will pull the openjdk:8 image using the authenticated session.
-                    bat 'docker build -t calculator .'
-                }
+                // Build the image using Dockerfile in root and context in main/
+                bat 'docker build -f Dockerfile -t calculator main'
             }
         }
 
