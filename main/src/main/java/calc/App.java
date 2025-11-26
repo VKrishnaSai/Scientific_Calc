@@ -7,9 +7,7 @@ import java.util.Scanner;
  *
  * This class implements a scientific calculator with arithmetic and power operations.
  * It provides a menu-driven interface for user interaction.
- *
- * Author: Based on Python implementation by Baibhab Adhikari
- * Java adaptation
+
  */
 public class App {
 

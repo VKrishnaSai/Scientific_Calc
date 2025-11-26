@@ -1,4 +1,4 @@
-calc/App$Arithmetic.class
-calc/App.class
-calc/App$Calculator.class
-calc/App$Power.class
+calc\App$Arithmetic.class
+calc\App.class
+calc\App$Calculator.class
+calc\App$Power.class
