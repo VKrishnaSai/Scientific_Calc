@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim
+FROM openjdk:8-jre
 
 COPY target/main-1.0-SNAPSHOT.jar app.jar
 
