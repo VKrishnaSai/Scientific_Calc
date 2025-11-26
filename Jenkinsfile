@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                // Assuming 'main' is the directory where pom.xml and source code reside
                 git branch: 'main', url: 'https://github.com/VKrishnaSai/Scientific_Calc.git'
             }
         }
@@ -19,6 +20,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir('main') {
+                    // Running tests without skipping
                     bat 'mvn test'
                 }
             }
@@ -27,20 +29,28 @@ pipeline {
         stage('Package') {
             steps {
                 dir('main') {
-                    bat 'mvn package -DskipTests'
+                    // Packaging the application (JAR)
+                    bat 'mvn package'
                 }
             }
         }
 
-        stage('Pull Base Image') {
+        // --- NEW/UPDATED DOCKER STAGES ---
+
+        // CRITICAL FIX: Login before building to authenticate base image pull
+        stage('Docker Login') {
             steps {
-                bat 'docker pull openjdk:8'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    // Log in to Docker Hub using stored credentials ('dockerhub' ID required)
+                    bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                }
             }
         }
-
+        
         stage('Build Docker Image') {
             steps {
                 dir('main') {
+                    // Build the image. Docker will pull the openjdk:8 image using the authenticated session.
                     bat 'docker build -t calculator .'
                 }
             }
@@ -48,9 +58,11 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
+                // Re-using credentials for tagging and pushing
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                    // Tag with user's Docker Hub username
                     bat 'docker tag calculator %DOCKER_USER%/calculator:latest'
+                    // Push the final image
                     bat 'docker push %DOCKER_USER%/calculator:latest'
                 }
             }
@@ -62,7 +74,7 @@ pipeline {
             echo 'Pipeline succeeded!'
         }
         failure {
-            echo 'Pipeline failed!'
+            echo 'Pipeline failed! Check the logs for the specific stage failure.'
         }
     }
 }
